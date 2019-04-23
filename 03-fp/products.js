@@ -80,12 +80,67 @@ describe('Sort', function(){
 
 });
 
-/*describe('Filter', function(){
+describe('Filter', function(){
 	describe('Default filter [stationary products]', function(){
 		function filter(){}
 		filter();
 		console.table(products);
 	});
-});*/
+
+	describe('Any list by any criteria', function(){
+		function filter(list, predicate){
+			var result = [];
+			for(var index = 0, count = list.length; index < count; index++)
+				if (predicate(list[index]))
+					result.push(list[index]);
+			return result;
+		}
+
+		function negate(predicate){
+			return function(){
+				return !predicate.apply(undefined, arguments);
+			}
+		}
+
+		describe('filter products by cost', function(){
+			var costlyProductPredicate = function(product){
+				return product.cost > 50;
+			}
+			describe('costly products [ cost > 50 ]', function(){
+				var costlyProducts = filter(products, costlyProductPredicate);
+				console.table(costlyProducts);
+			});
+
+			describe('affordable products [ !costlyProduct ]', function(){
+				/*var affordableProductProdicate = function(product){
+					return !costlyProductPredicate(product);
+				};*/
+				var affordableProductProdicate = negate(costlyProductPredicate);
+				var affordableProducts = filter(products, affordableProductProdicate);
+				console.table(affordableProducts);
+			});
+
+		});
+
+		describe('filter products by units', function(){
+			var underStockedProductsPredicate = function(product){
+				return product.units < 50;
+			};
+			describe('filter understocked products [ units < 50 ]', function(){	
+				var underStockedProducts = filter(products, underStockedProductsPredicate);
+				console.table(underStockedProducts);
+			});
+
+			describe('filter well stocked products [ units >= 50 ]', function(){
+				/*var wellStockedProductPredicate = function(product){
+					return !underStockedProductsPredicate(product);
+				};*/
+				var wellStockedProductPredicate = negate(underStockedProductsPredicate);
+				var wellStockedProducts = filter(products, wellStockedProductPredicate);
+				console.table(wellStockedProducts);
+			})
+		})
+	});
+});
 
 
