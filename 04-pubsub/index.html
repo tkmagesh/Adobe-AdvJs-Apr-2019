@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PubSub - demo</title>
+	<script src="pubsub.js"></script>
+	<script>
+		var evtName1 = 'event-1',
+		evtName2 = 'event-2',
+		subscription1 = function(data){
+			console.log('subscription1 triggered with ', data);
+		},
+		subscription2 = function(data1, data2){
+			console.log('subscription2 triggered with ', data1, data2);
+		},
+		data = 100,
+		data1 = {},
+		data2 = { value : 'dummy' };
+
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
