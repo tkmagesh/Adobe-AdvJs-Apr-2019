@@ -1,0 +1,22 @@
+pubsub()
+
+implementation - 1
+pubsub('evtname').subscribe(fn);
+pubsub('evtname').publish('data');
+pubsub('evtname').unsubscribe(fn)
+
+
+implementation - 2
+pubsub('evtname').subscribe(fn1, fn2, f3)
+pubsub('evtname').publish(data1, data2, data3);
+pubsub('evtname').unsubscribe(fn1, fn2, f3)
+
+implementation - 3
+pubsub('evtname')
+	.subscribe(fn)
+	.publish(data)
+	.unsubscribe(fn)
+
+
+homework
+pubsub('evtname').subscribe([fn, context])
