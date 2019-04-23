@@ -12,6 +12,14 @@ function describe(title, fn){
 	console.groupEnd();
 }
 
+function describeGroup(groupedObj){
+	for(var key in groupedObj){
+		describe('Key - [' + key + ']', function(){
+			console.table(groupedObj[key]);
+		});
+	}
+}
+
 describe('Default List', function(){
 	console.table(products);
 });
@@ -64,17 +72,31 @@ describe('Sort', function(){
 					}
 		};
 
-		describe('products by value [ value = cost * units ]', function(){
-			var compareProductsByValue = function(p1, p2){
-				var p1Value = p1.cost * p1.units,
-					p2Value = p2.cost * p2.units;
-				if (p1Value < p2Value) return -1;
-				if (p1Value > p2Value) return 1;
-				return 0;
+		var compareProductsByValue = function(p1, p2){
+			var p1Value = p1.cost * p1.units,
+				p2Value = p2.cost * p2.units;
+			if (p1Value < p2Value) return -1;
+			if (p1Value > p2Value) return 1;
+			return 0;
+		};
+
+		function getDescendingComparer(comparer){
+			return function(p1, p2){
+				return comparer(p1, p2) * -1;
 			}
+		}
+
+		describe('products by value [ value = cost * units ]', function(){
+			
 			sort(products, compareProductsByValue);
 			console.table(products);
-		})
+		});
+
+		describe('products by value in descending', function(){
+			var descComparer = getDescendingComparer(compareProductsByValue);
+			sort(products, descComparer);
+			console.table(products);
+		});
 	})
 
 
@@ -142,5 +164,55 @@ describe('Filter', function(){
 		})
 	});
 });
+
+describe('GroupBy', function(){
+	describe('products by category', function(){
+		function groupProductsByCategory(){
+			var result = {
+				stationary : [],
+				grocery : [],
+				utencil : []
+			};
+
+			for(var index = 0, count = products.length; index < count; index++){
+				var product = products[index];
+				result[product.category].push(product);
+			}
+			return result;
+		}
+
+		var productsByCategory = groupProductsByCategory();
+		console.log(productsByCategory);
+	});
+
+	describe('any list by any key', function(){
+		function groupBy(list, keySelector){
+			var result = {};
+			for(var index = 0, count = list.length; index < count; index++){
+				var item = list[index],
+					key = keySelector(item);
+				result[key] = result[key] || [];
+				result[key].push(item);
+			}
+			return result;
+		}
+
+		describe('products by category', function(){
+			var categoryKeySelector = function(product){
+				return product.category;
+			};
+			var productsByCategory = groupBy(products, categoryKeySelector);
+			describeGroup(productsByCategory);
+		});
+
+		describe('products by cost', function(){
+			var costKeySelector = function(product){
+				return product.cost > 50 ? 'costly' : 'affordable';
+			};
+			var productsByCost = groupBy(products, costKeySelector);
+			describeGroup(productsByCost);
+		})
+	})
+})
 
 
