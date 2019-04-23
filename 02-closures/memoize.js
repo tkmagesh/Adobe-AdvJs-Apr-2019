@@ -34,10 +34,8 @@ var isOddOrEven = (function(){
 
 
 
-function memoize(fn){
-	
+function memoize(fn){	
 	var cache = {};
-
 	return function(n){
 		if (typeof cache[n] === 'undefined')
 			cache[n] = fn(n);	
@@ -58,3 +56,18 @@ var isOddOrEven = memoize(function checkOddOrEven(n){
 	console.log('processing ', n);
 	return n % 2 === 0 ? 'even' : 'odd';
 });
+
+
+function add(x,y){
+	return x + y;
+}
+
+function memoize(fn){	
+	var cache = {};
+	return function(){
+		var key = JSON.stringify(arguments);
+		if (typeof cache[key] === 'undefined')
+			cache[key] = fn.apply(undefined, arguments);	
+		return cache[key];
+	}
+}
