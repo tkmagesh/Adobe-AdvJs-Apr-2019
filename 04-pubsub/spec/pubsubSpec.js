@@ -40,8 +40,6 @@ describe("PubSub", function(){
 
 		expect(subscriptionFn).toHaveBeenCalled();
 
-		
-
 	});
 
 	it('should invoke the subscription with the data when the event is published', function(){
