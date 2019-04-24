@@ -121,5 +121,3 @@ var pubsub = (function(){
 		return _pubsub_intances[evtName];
 	}
 })();
-
-console.log(pubsub);
